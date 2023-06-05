@@ -4,6 +4,8 @@
  * @authorId 644298972420374528
  * @description Changes various things on your client to be *perfect*. (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
  * @version 1.0
+ * @source https://github.com/PrinceBunBun981/BetterDiscordPlugins
+ * @updateUrl https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/OwOcord.plugin.js
  */
 /*@cc_on
 @if (@_jscript)
@@ -128,6 +130,8 @@ const config = {
         }],
         "version": "1.0",
         "description": transform("Changes various things on your client to be *perfect*."),
+        "github": "https://github.com/PrinceBunBun981/BetterDiscordPlugins",
+        "github_raw": "https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/OwOcord.plugin.js"
     },
     "defaultConfig": [{
         "type": "switch",
