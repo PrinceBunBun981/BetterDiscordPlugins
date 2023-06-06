@@ -3,7 +3,7 @@
  * @author PrinceBunBun981
  * @authorId 644298972420374528
  * @description Changes various things on your client to be *perfect*. (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
- * @version 1.0
+ * @version 1.1
  * @source https://github.com/PrinceBunBun981/BetterDiscordPlugins
  * @updateUrl https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/OwOcord.plugin.js
  */
@@ -128,7 +128,7 @@ const config = {
             "discord_id": "644298972420374528",
             "github_username": "PrinceBunBun981",
         }],
-        "version": "1.0",
+        "version": "1.1",
         "description": transform("Changes various things on your client to be *perfect*."),
         "github": "https://github.com/PrinceBunBun981/BetterDiscordPlugins",
         "github_raw": "https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/OwOcord.plugin.js"
@@ -152,6 +152,13 @@ const config = {
         "id": "transformChannels",
         "name": "Channel Names",
         "note": transform("OwOify channel names in servers to be perfect."),
+        "value": true
+    },
+    {
+        "type": "switch",
+        "id": "transformSentMessages",
+        "name": "Sent Messages",
+        "note": transform("OwOify messages that you send."),
         "value": true
     }
 ]};
@@ -179,7 +186,7 @@ if (!global.ZeresPluginLibrary) {
  
 module.exports = !global.ZeresPluginLibrary ? Dummy : (([Plugin, Api]) => {
     const plugin = (Plugin, Library) => {
-    const {Logger, Patcher} = Library;
+    const {Logger, Patcher, DiscordModules} = Library;
 
     const language = BdApi.findModuleByProps("getLanguages", "Messages");
     const provider = language._provider;
@@ -269,6 +276,9 @@ module.exports = !global.ZeresPluginLibrary ? Dummy : (([Plugin, Api]) => {
             Logger.log("Started");
             if (settings.transformStrings) setTimeout(() => {transformStrings()}, 5000);
             transformGuildsAndChannels(settings.transformGuilds, settings.transformChannels);
+            Patcher.after(DiscordModules.MessageActions, "sendMessage", (_, [, message]) => {
+                if (settings.transformSentMessages) message.content = transform(message.content);
+            });
         }
 
         onStop() {
