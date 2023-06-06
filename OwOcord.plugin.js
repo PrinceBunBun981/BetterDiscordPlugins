@@ -3,7 +3,7 @@
  * @author PrinceBunBun981
  * @authorId 644298972420374528
  * @description Changes various things on your client to be *perfect*. (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
- * @version 1.1
+ * @version 1.1.2
  * @source https://github.com/PrinceBunBun981/BetterDiscordPlugins
  * @updateUrl https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/OwOcord.plugin.js
  */
@@ -128,7 +128,7 @@ const config = {
             "discord_id": "644298972420374528",
             "github_username": "PrinceBunBun981",
         }],
-        "version": "1.1",
+        "version": "1.1.2",
         "description": transform("Changes various things on your client to be *perfect*."),
         "github": "https://github.com/PrinceBunBun981/BetterDiscordPlugins",
         "github_raw": "https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/OwOcord.plugin.js"
@@ -163,7 +163,7 @@ const config = {
     }
 ]};
 
-const settings = BdApi.loadData(config.info.name, `settings`);
+let settings = BdApi.loadData(config.info.name, `settings`);
 
 class Dummy {
     constructor() {this._config = config;}
@@ -314,6 +314,7 @@ module.exports = !global.ZeresPluginLibrary ? Dummy : (([Plugin, Api]) => {
                         }
                         break;
                 }
+                settings = BdApi.loadData(config.info.name, `settings`);
             });
             return panel.getElement();
         }
