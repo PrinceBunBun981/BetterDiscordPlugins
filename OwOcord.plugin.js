@@ -137,7 +137,7 @@ const config = {
         "type": "switch",
         "id": "transformStrings",
         "name": "Discord Strings",
-        "note": transform("OwOify Discord messages to be perfect. Very buggy - will occasionally crash."),
+        "note": transform("OwOify Discord messages to be perfect."),
         "value": true
     },
     {
