@@ -3,7 +3,7 @@
  * @author PrinceBunBun981
  * @authorId 644298972420374528
  * @description Crazy? I was crazy once. They locked me in a room... a rubber room... a rubber room with rats... and rats make me crazy.
- * @version 1.0
+ * @version 1.1
  * @source https://github.com/PrinceBunBun981/BetterDiscordPlugins
  * @updateUrl https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/Crazy.plugin.js
  */
@@ -40,7 +40,7 @@ const config = {
             "discord_id": "644298972420374528",
             "github_username": "PrinceBunBun981",
         }],
-        "version": "1.0",
+        "version": "1.1",
         "description": "Crazy? I was crazy once. They locked me in a room... a rubber room... a rubber room with rats... and rats make me crazy.",
         "github": "https://github.com/PrinceBunBun981/BetterDiscordPlugins",
         "github_raw": "https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/Crazy.plugin.js"
@@ -100,7 +100,7 @@ module.exports = !global.ZeresPluginLibrary ? Dummy : (([Plugin, Api]) => {
 
     return class Crazy extends Plugin {
         async onMessage({message, channelId}) {
-            if (settings.autoCrazy && Date.now() - lastUsed > 10000 && message.content.toLowerCase().includes("crazy") && message.author.id != CurrentUserStore.getCurrentUser().id) {
+            if (settings.autoCrazy && Date.now() - lastUsed > 25000 && message.content.toLowerCase().includes("crazy") && message.author.id != CurrentUserStore.getCurrentUser().id) {
                 let channel = ChannelStore.getChannel(channelId);
                 if (channel.isDM() || channel.isGroupDM()) {
                     Toast.showToast(Toast.createToast(`${message.author.username} is crazy.`, Toast.ToastType.MESSAGE, {position: Toast.ToastPosition.TOP}));
