@@ -3,7 +3,7 @@
  * @author PrinceBunBun981
  * @authorId 644298972420374528
  * @description Crazy? I was crazy once. They locked me in a room... a rubber room... a rubber room with rats... and rats make me crazy.
- * @version 1.1
+ * @version 1.2
  * @source https://github.com/PrinceBunBun981/BetterDiscordPlugins
  * @updateUrl https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/Crazy.plugin.js
  */
@@ -40,7 +40,7 @@ const config = {
             "discord_id": "644298972420374528",
             "github_username": "PrinceBunBun981",
         }],
-        "version": "1.1",
+        "version": "1.2",
         "description": "Crazy? I was crazy once. They locked me in a room... a rubber room... a rubber room with rats... and rats make me crazy.",
         "github": "https://github.com/PrinceBunBun981/BetterDiscordPlugins",
         "github_raw": "https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/Crazy.plugin.js"
@@ -53,6 +53,13 @@ const config = {
         "value": false
     }]
 };
+
+const messages = {
+    crazy_messages: ["crazy?", "i was crazy once", "they locked me in a room", "a rubber room", "a rubber room with rats", "and rats make me crazy"],
+    context_button: "Crazy?",
+    user_is_crazy: "%user% is crazy.",
+    sent_repeat_text: "That was crazy!"
+}
  
 let settings = BdApi.loadData(config.info.name, `settings`);
 
@@ -85,16 +92,15 @@ module.exports = !global.ZeresPluginLibrary ? Dummy : (([Plugin, Api]) => {
     const ChannelStore = BdApi.findModuleByProps("getDMFromUserId");
     const MessageStore = BdApi.findModuleByProps("sendMessage");
     const Toast = BdApi.findModuleByProps("showToast");
-    const Messages = ["crazy?", "i was crazy once", "they locked me in a room", "a rubber room", "a rubber room with rats", "and rats make me crazy"];
 
     let lastUsed = 0;
 
     async function repeatSend(id) {
         console.log(id);
-        Toast.showToast(Toast.createToast("That was crazy!", Toast.ToastType.SUCCESS, {position: Toast.ToastPosition.TOP}));
-        for (var i = 0; i < Messages.length; i++) {
-            MessageStore.sendMessage(id, {content: Messages[i], invalidEmojis: [], validNonShortcutEmojis: []});
-            await new Promise(res => setTimeout(res, Messages[i].length * Math.floor(Math.random() * (150 - 100 + 1) + 100 + (Messages[i].includes(" ") ? 0 : 200))));
+        Toast.showToast(Toast.createToast(messages.sent_repeat_text, Toast.ToastType.SUCCESS, {position: Toast.ToastPosition.TOP}));
+        for (var i = 0; i < messages.crazy_messages.length; i++) {
+            MessageStore.sendMessage(id, {content: messages.crazy_messages[i], invalidEmojis: [], validNonShortcutEmojis: []});
+            await new Promise(res => setTimeout(res, messages.crazy_messages[i].length * Math.floor(Math.random() * (150 - 100 + 1) + 100 + (messages.crazy_messages[i].includes(" ") ? 0 : 200))));
         }
     }
 
@@ -103,7 +109,7 @@ module.exports = !global.ZeresPluginLibrary ? Dummy : (([Plugin, Api]) => {
             if (settings.autoCrazy && Date.now() - lastUsed > 25000 && message.content.toLowerCase().includes("crazy") && message.author.id != CurrentUserStore.getCurrentUser().id) {
                 let channel = ChannelStore.getChannel(channelId);
                 if (channel.isDM() || channel.isGroupDM()) {
-                    Toast.showToast(Toast.createToast(`${message.author.username} is crazy.`, Toast.ToastType.MESSAGE, {position: Toast.ToastPosition.TOP}));
+                    Toast.showToast(Toast.createToast(messages.user_is_crazy.replace("%user%", message.author.username), Toast.ToastType.MESSAGE, {position: Toast.ToastPosition.TOP}));
                     lastUsed = Date.now();
                     await new Promise(res => setTimeout(res, Math.floor(Math.random() * (7500 - 5000 + 1) + 5000)));
                     repeatSend(channel.id);
@@ -112,14 +118,42 @@ module.exports = !global.ZeresPluginLibrary ? Dummy : (([Plugin, Api]) => {
         }
 
         onStart() {         
-            this.contextMenuPatch = BdApi.ContextMenu.patch("user-context", (tree, c) => {
+            this.userContextMenuPatch = BdApi.ContextMenu.patch("user-context", (tree, c) => {
+                if (c.user.id != CurrentUserStore.getCurrentUser().id && !c.user.bot && !c.user.system) {
+                    tree.props.children.push(
+                        React.createElement(BdApi.ContextMenu.Separator),
+                        React.createElement(BdApi.ContextMenu.Item, {
+                            label: messages.context_button,
+                            id: "user-crazy-context-menu-item",
+                            action: () => {
+                                repeatSend(ChannelStore.getDMFromUserId(c.user.id));
+                            }
+                        })
+                    );
+                }
+            });
+
+            this.channelContextMenuPatch = BdApi.ContextMenu.patch("channel-context", (tree, c) => {
                 tree.props.children.push(
                     React.createElement(BdApi.ContextMenu.Separator),
                     React.createElement(BdApi.ContextMenu.Item, {
-                        label: "Crazy?",
-                        id: "crazy-context-menu-item",
+                        label: messages.context_button,
+                        id: "channel-crazy-context-menu-item",
                         action: () => {
-                            repeatSend(ChannelStore.getDMFromUserId(c.user.id));
+                            repeatSend(c.channel.id);
+                        }
+                    })
+                );
+            });
+
+            this.gdmContextMenuPatch = BdApi.ContextMenu.patch("gdm-context", (tree, c) => {
+                tree.props.children.push(
+                    React.createElement(BdApi.ContextMenu.Separator),
+                    React.createElement(BdApi.ContextMenu.Item, {
+                        label: messages.context_button,
+                        id: "gdm-crazy-context-menu-item",
+                        action: () => {
+                            repeatSend(c.id);
                         }
                     })
                 );
@@ -131,7 +165,9 @@ module.exports = !global.ZeresPluginLibrary ? Dummy : (([Plugin, Api]) => {
         }
 
         onStop() {
-            this.contextMenuPatch();
+            this.userContextMenuPatch();
+            this.channelContextMenuPatch();
+            this.gdmContextMenuPatch();
             Dispatcher.unsubscribe("MESSAGE_CREATE", this.onMessage);
             Patcher.unpatchAll();
 
