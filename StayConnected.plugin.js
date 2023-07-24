@@ -1,11 +1,11 @@
 /**
- * @name PreventAFKDisconnect
+ * @name StayConnected
  * @author PrinceBunBun981
  * @authorId 644298972420374528
  * @description Prevents Discord from kicking you from calls when alone for too long.
  * @version 1.0
  * @source https://github.com/PrinceBunBun981/BetterDiscordPlugins
- * @updateUrl https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/PreventAFKDisconnect.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/StayConnected.plugin.js
  */
 /*@cc_on
 @if (@_jscript)
@@ -34,7 +34,7 @@
 const config = {
     "main": "index.js",
     "info": {
-        "name": "PreventAFKDisconnect",
+        "name": "StayConnected",
         "authors": [{
             "name": "PrinceBunBun981",
             "discord_id": "644298972420374528",
@@ -43,7 +43,7 @@ const config = {
         "version": "1.0",
         "description": "Prevents Discord from kicking you from calls when alone for too long.",
         "github": "https://github.com/PrinceBunBun981/BetterDiscordPlugins",
-        "github_raw": "https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/PreventAFKDisconnect.plugin.js"
+        "github_raw": "https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/StayConnected.plugin.js"
     }
 };
 
@@ -71,7 +71,7 @@ module.exports = !global.ZeresPluginLibrary ? Dummy : (([Plugin, Api]) => {
     const plugin = (Plugin, Library) => {
     const {Logger, Patcher} = Library;
 
-    return class PreventAFKDisconnect extends Plugin {
+    return class StayConnected extends Plugin {
         onStart() {         
             const Timeout = ZeresPluginLibrary.WebpackModules.getModule((m) =>
                 ["start", "stop", "isStarted"].every(
