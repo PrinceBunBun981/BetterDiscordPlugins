@@ -3,7 +3,7 @@
  * @author PrinceBunBun981
  * @authorId 644298972420374528
  * @description Crazy? I was crazy once. They locked me in a room... a rubber room... a rubber room with rats... and rats make me crazy.
- * @version 1.2
+ * @version 1.3
  * @source https://github.com/PrinceBunBun981/BetterDiscordPlugins
  * @updateUrl https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/Crazy.plugin.js
  */
@@ -40,7 +40,7 @@ const config = {
             "discord_id": "644298972420374528",
             "github_username": "PrinceBunBun981",
         }],
-        "version": "1.2",
+        "version": "1.3",
         "description": "Crazy? I was crazy once. They locked me in a room... a rubber room... a rubber room with rats... and rats make me crazy.",
         "github": "https://github.com/PrinceBunBun981/BetterDiscordPlugins",
         "github_raw": "https://raw.githubusercontent.com/PrinceBunBun981/BetterDiscordPlugins/main/Crazy.plugin.js"
@@ -153,7 +153,7 @@ module.exports = !global.ZeresPluginLibrary ? Dummy : (([Plugin, Api]) => {
                         label: messages.context_button,
                         id: "gdm-crazy-context-menu-item",
                         action: () => {
-                            repeatSend(c.id);
+                            repeatSend(c.channel.id);
                         }
                     })
                 );
