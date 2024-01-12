@@ -8,7 +8,10 @@ Transforms Discord strings, guild names, channel names, and sent messages to be 
 Adds a context menu button to automatically send the crazy copypasta line by line as well as the ability to automatically respond to DMs or GDMs when the word "crazy" is sent.
 
 ## StayConnected
-Prevents discord from kicking you from DM or GDM calls for being alone for too long.
+Prevents Discord from kicking you from DM or GDM calls for being alone for too long.
+
+## DisableHangStatuses
+Stops Discord from automatically setting a hang status when joining voice channels.
 
 ---
 <a name="disclaimer"></a>**Disclaimer:** *The use of any plugins mentioned here, especially those marked with an asterisk (\*), may risk action taken on your account. I take no responsibility.*
